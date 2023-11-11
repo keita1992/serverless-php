@@ -1,0 +1,73 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Sample CakePHP4 Applications ofServerless API
+
+Globals:
+  Function:
+    Timeout: 3
+
+Parameters:
+  Stage:
+    Type: String
+    Default: Prod
+    AllowedValues:
+      - Prod
+      - Staging
+      - Dev
+    Description: The stage environment name.
+  DomainName:
+    Type: String
+    Description: The domain name of the API
+  HostedZoneId:
+    Type: String
+    Description: The hosted zone id of the domain name
+  CertificateArn:
+    Type: String
+    Description: The certificate arn of the domain name
+
+Resources:
+  Lambda:
+    Type: AWS::Serverless::Function
+    Properties:
+        FunctionName: app
+        CodeUri: .
+        Runtime: provided.al2
+        Handler: index.php
+        MemorySize: 1024
+        Timeout: 30
+        Layers:
+            - arn:aws:lambda:us-east-1:534081306603:layer:php-81-fpm:61
+
+  LambdaApiGatewayInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref Lambda
+      Principal: apigateway.amazonaws.com
+
+  ApiGateway:
+      Type: AWS::Serverless::Api
+      Properties:
+        Auth:
+          ApiKeyRequired: false
+        StageName: !Ref Stage
+        Domain:
+          DomainName: !Ref DomainName
+          CertificateArn: !Ref CertificateArn
+          EndpointConfiguration: EDGE
+          Route53:
+            HostedZoneId: !Ref HostedZoneId
+        DefinitionBody:
+          swagger: '2.0'
+          info:
+            title:
+              Ref: AWS::StackName
+          paths:
+            /api/articles.json:
+              get:
+                x-amazon-apigateway-integration:
+                  httpMethod: POST
+                  type: aws_proxy
+                  uri:
+                    Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Lambda.Arn}/invocations
+                responses: {}

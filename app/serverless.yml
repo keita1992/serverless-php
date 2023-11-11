@@ -1,0 +1,46 @@
+service: app
+
+provider:
+    name: aws
+    region: us-east-1
+    runtime: provided.al2
+    environment:
+      ENV: 'prod'
+
+plugins:
+    - ./vendor/bref/bref
+
+functions:
+    web:
+        handler: public/index.php
+        description: 'CakePHP4 Application'
+        layers:
+            - ${bref:layer.php-81-fpm}
+        events:
+          -  httpApi: '*'
+        environment:
+            APP_ENV: 'prod'
+            LOG_ERROR: 1
+
+custom:
+  bref:
+    web_dirs:
+        - webroot
+
+# Exclude files from deployment
+package:
+    patterns:
+        - '!node_modules/**'
+        - '!tests/**'
+        - '!resources/assets/**'
+        - '!tmp/**'
+        - '!logs/**'
+
+# Include only specific files necessary for the runtime
+include:
+    - src/**
+    - config/**
+    - plugins/**
+    - vendor/**
+    - webroot/**
+    - composer.json

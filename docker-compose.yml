@@ -1,0 +1,60 @@
+version: "2.4"
+services:
+  mysql:
+    image: mysql:8.0
+    restart: always
+    volumes:
+      - "./env/mysql/db:/var/lib/mysql"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      TZ: "Asia/Tokyo"
+    ports:
+      - "3306:3306"
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    build: ./env/phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mysql
+      - PMA_USER=root
+      - PMA_PASSWORD=password
+    links:
+      - mysql
+    ports:
+      - "8080:80"
+    volumes:
+      - "/sessions"
+      - "./env/phpmyadmin/conf.d:/usr/local/etc/php/conf.d"
+  nginx:
+    restart: always
+    build: ./env/nginx
+    image: "nginx"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "./app:/var/www/html"
+      - "./env/nginx/conf:/etc/nginx"
+      - "./env/nginx/log:/var/log/nginx/"
+    environment:
+      TZ: "Asia/Tokyo"
+    depends_on:
+      - phpfpm
+    links:
+      - phpfpm
+  phpfpm:
+    image: php:8.1-fpm
+    build: ./env/phpfpm/
+    ports:
+      - "9000:9000"
+    environment:
+      TZ: "Asia/Tokyo"
+    volumes:
+      - "./app:/var/www/html"
+      - "./env/phpfpm/conf:/usr/local/etc/php"
+    depends_on:
+      - mysql
+    links:
+      - mysql
+    mem_limit: 1G
+    mem_reservation: 512M
