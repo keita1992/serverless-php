@@ -11,7 +11,6 @@ services:
     ports:
       - "3306:3306"
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
     build: ./env/phpmyadmin
     environment:
       - PMA_ARBITRARY=1
