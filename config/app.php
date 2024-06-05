@@ -97,7 +97,8 @@ return [
     'Cache' => [
         'default' => [
             'className' => FileEngine::class,
-            'path' => CACHE,
+            // 'path' => CACHE,
+            'path' => '/tmp',
             'url' => env('CACHE_DEFAULT_URL', null),
         ],
 
@@ -110,7 +111,8 @@ return [
         '_cake_core_' => [
             'className' => FileEngine::class,
             'prefix' => 'myapp_cake_core_',
-            'path' => CACHE . 'persistent' . DS,
+            // 'path' => CACHE . 'persistent' . DS,
+            'path' => '/tmp/persistent' . DS,
             'serialize' => true,
             'duration' => '+1 years',
             'url' => env('CACHE_CAKECORE_URL', null),
@@ -125,7 +127,8 @@ return [
         '_cake_model_' => [
             'className' => FileEngine::class,
             'prefix' => 'myapp_cake_model_',
-            'path' => CACHE . 'models' . DS,
+            // 'path' => CACHE . 'models' . DS,
+            'path' => '/tmp/models' . DS,
             'serialize' => true,
             'duration' => '+1 years',
             'url' => env('CACHE_CAKEMODEL_URL', null),
@@ -139,7 +142,8 @@ return [
         '_cake_routes_' => [
             'className' => FileEngine::class,
             'prefix' => 'myapp_cake_routes_',
-            'path' => CACHE,
+            // 'path' => CACHE,
+            'path' => '/tmp',
             'serialize' => true,
             'duration' => '+1 years',
             'url' => env('CACHE_CAKEROUTES_URL', null),

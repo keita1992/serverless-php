@@ -1,4 +1,4 @@
-FROM php:8.1-fpm
+FROM php:8.2-fpm
 
 RUN apt-get update
 RUN apt-get install -y git vim
@@ -18,14 +18,15 @@ RUN apt-get install -y \
   && docker-php-ext-install intl \
   && docker-php-ext-install mbstring \
   && docker-php-ext-install pdo \
-  && docker-php-ext-install pdo_mysql \
-  # && docker-php-ext-install tokenizer \
-  # && docker-php-ext-install xml \
-  # && docker-php-ext-install zip \
-  # && docker-php-ext-install exif \
-  # && docker-php-ext-install bcmath \
-  # && docker-php-ext-install xsl \
-  # && docker-php-ext-install soap
+  && docker-php-ext-install pdo_mysql
+# && docker-php-ext-install tokenizer \
+# && docker-php-ext-install xml \
+# && docker-php-ext-install zip \
+# && docker-php-ext-install exif \
+# && docker-php-ext-install bcmath \
+# && docker-php-ext-install xsl \
+# && docker-php-ext-install soap
 
-  COPY --from=composer /usr/bin/composer /usr/bin/composer
+
+COPY --from=composer /usr/bin/composer /usr/bin/composer
 ENV PATH $PATH:/usr/bin/composer

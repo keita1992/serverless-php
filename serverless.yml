@@ -15,7 +15,7 @@ functions:
         handler: public/index.php
         description: 'CakePHP4 Application'
         layers:
-            - ${bref:layer.php-81-fpm}
+            - ${bref:layer.php-82-fpm}
         events:
           -  httpApi: '*'
         environment:
