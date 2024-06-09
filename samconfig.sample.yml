@@ -1,0 +1,48 @@
+version: 0.1
+
+default:
+  global:
+    parameters: {}
+
+  build:
+    parameters:
+      cached: true
+      parallel: true
+
+  validate:
+    parameters:
+      lint: true
+
+  package:
+    parameters:
+      template_file: template.[yaml|yml|json]
+      output_template_file: bref-output.yml
+      resolve_s3: true
+      region: us-east-1
+
+  deploy:
+    parameters:
+      stack_name: serverless-php
+      debug: true
+      capabilities: CAPABILITY_IAM
+      confirm_changeset: false
+      region: us-east-1
+      disable_rollback: false
+      image_repositories: []
+      template_file: bref-output.yml
+      parameter_overrides: 
+        - "HostedZoneId="  # fill here
+        - "CertificateArn="  # fill here
+        - "DomainName="  # fill here
+
+  sync:
+    parameters:
+      watch: true
+
+  local_start_api:
+    parameters:
+      warm_containers: EAGER
+
+  local_start_lambda:
+    parameters:
+      warm_containers: EAGER

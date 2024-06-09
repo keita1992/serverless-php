@@ -4,7 +4,8 @@ This is a sample of CakePHP4 application with AWS Serverless Architecture.
 
 # Local Dev
 
-You need to install docker & docker composer
+1. Make `.env` file from `.env.sample`
+2. You need to install docker & docker composer
 
 ```
 docker-compose build
@@ -13,10 +14,9 @@ docker-compose up -d
 
 # build & deploy
 
-You need to make `.env` at app directory.
+Make `samconfig.yml` if not exists, from `samconfig.sample.yml`
 
 ```
-cd app
-composer build
-composer deploy
+sam package
+sam deploy
 ```

@@ -13,9 +13,7 @@
         ],
         "cs-check": "phpcs --colors -p",
         "cs-fix": "phpcbf --colors -p",
-        "test": "phpunit --colors=always",
-        "build": "sam package --template-file template.yaml --output-template-file bref-output.yaml --s3-bucket serverless-cakephp",
-        "deploy": "sam deploy --template-file bref-output.yaml --stack-name serverless-cakephp --capabilities CAPABILITY_IAM --parameter-overrides 'HostZoneId=$HostZoneId,CertificateArn=$CertificateArn,DomainName=$DomainName'"
+        "test": "phpunit --colors=always"
     },
     "require": {
         "php": ">=7.4",

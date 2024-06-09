@@ -3,6 +3,8 @@
 use Cake\Cache\Engine\FileEngine;
 use Cake\Database\Connection;
 use Cake\Database\Driver\Mysql;
+use Cake\Console\ConsoleOutput;
+use Cake\Log\Engine\ConsoleLog;
 use Cake\Log\Engine\FileLog;
 use Cake\Mailer\Transport\MailTransport;
 
@@ -49,8 +51,8 @@ return [
     'App' => [
         'namespace' => 'App',
         'encoding' => env('APP_ENCODING', 'UTF-8'),
-        'defaultLocale' => env('APP_DEFAULT_LOCALE', 'en_US'),
-        'defaultTimezone' => env('APP_DEFAULT_TIMEZONE', 'UTC'),
+        'defaultLocale' => env('APP_DEFAULT_LOCALE', 'ja_JP'),
+        'defaultTimezone' => env('APP_DEFAULT_TIMEZONE', 'Asia/Tokyo'),
         'base' => false,
         'dir' => 'src',
         'webroot' => 'webroot',
@@ -112,7 +114,7 @@ return [
             'className' => FileEngine::class,
             'prefix' => 'myapp_cake_core_',
             // 'path' => CACHE . 'persistent' . DS,
-            'path' => '/tmp/persistent' . DS,
+            'path' => $_ENV['ENV'] === 'dev' ? CACHE : '/tmp' . '/persistent' . DS,
             'serialize' => true,
             'duration' => '+1 years',
             'url' => env('CACHE_CAKECORE_URL', null),
@@ -128,7 +130,7 @@ return [
             'className' => FileEngine::class,
             'prefix' => 'myapp_cake_model_',
             // 'path' => CACHE . 'models' . DS,
-            'path' => '/tmp/models' . DS,
+            'path' => $_ENV['ENV'] === 'dev' ? CACHE : '/tmp' . '/models' . DS,
             'serialize' => true,
             'duration' => '+1 years',
             'url' => env('CACHE_CAKEMODEL_URL', null),
@@ -143,7 +145,7 @@ return [
             'className' => FileEngine::class,
             'prefix' => 'myapp_cake_routes_',
             // 'path' => CACHE,
-            'path' => '/tmp',
+            'path' => $_ENV['ENV'] === 'dev' ? CACHE : '/tmp',
             'serialize' => true,
             'duration' => '+1 years',
             'url' => env('CACHE_CAKEROUTES_URL', null),
@@ -300,7 +302,7 @@ return [
             'className' => Connection::class,
             'driver' => Mysql::class,
             'persistent' => false,
-            'timezone' => 'UTC',
+            'timezone' => 'Asia/Tokyo',
 
             /*
              * For MariaDB/MySQL the internal default changed from utf8 to utf8mb4, aka full utf-8 support, in CakePHP 3.6
@@ -359,23 +361,26 @@ return [
      */
     'Log' => [
         'debug' => [
-            'className' => 'Cake\Log\Engine\ConsoleLog',
+            'className' => ConsoleLog::class,
             'stream' => 'php://stdout',
             'levels' => ['notice', 'info', 'debug'],
             'url' => env('LOG_DEBUG_URL', null),
+            'outputAs' => ConsoleOutput::PLAIN,
         ],
         'error' => [
-            'className' => 'Cake\Log\Engine\ConsoleLog',
+            'className' => ConsoleLog::class,
             'stream' => 'php://stderr',
             'levels' => ['warning', 'error', 'critical', 'alert', 'emergency'],
             'url' => env('LOG_ERROR_URL', null),
+            'outputAs' => ConsoleOutput::PLAIN,
         ],
         // To enable this dedicated query log, you need set your datasource's log flag to true
         'queries' => [
-            'className' => 'Cake\Log\Engine\ConsoleLog',
+            'className' => ConsoleLog::class,
             'stream' => 'php://stderr',
             'url' => env('LOG_QUERIES_URL', null),
             'scopes' => ['queriesLog'],
+            'outputAs' => ConsoleOutput::PLAIN,
         ],
     ],
 

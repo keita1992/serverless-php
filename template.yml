@@ -29,7 +29,7 @@ Resources:
   Lambda:
     Type: AWS::Serverless::Function
     Properties:
-        FunctionName: app
+        FunctionName: serverless-php
         CodeUri: .
         Runtime: provided.al2
         Handler: index.php

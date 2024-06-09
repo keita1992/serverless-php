@@ -55,9 +55,10 @@ yarn-error.log
 
 # AWS SAM
 .aws-sam/*
+samconfig.yml
 
 # bref
-bref-output.yaml
+bref-output.yml
 
 # MacOS specific files #
 **/.DS_Store
