@@ -37,6 +37,9 @@ class AppController extends Controller
      *
      * @return void
      */
+
+    protected $articles_table;
+
     public function initialize(): void
     {
         parent::initialize();
@@ -44,6 +47,8 @@ class AppController extends Controller
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
 
+        $this->articles_table = $this->getTableLocator()->get('Articles');
+        
         /*
          * Enable the following component for recommended CakePHP form protection settings.
          * see https://book.cakephp.org/4/en/controllers/components/form-protection.html

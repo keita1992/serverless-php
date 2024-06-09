@@ -13,10 +13,9 @@ services:
   phpmyadmin:
     build: ./docker/phpmyadmin
     environment:
-      - PMA_ARBITRARY=1
-      - PMA_HOST=mysql
-      - PMA_USER=root
-      - PMA_PASSWORD=password
+      - PMA_HOST=${DB_HOST}
+      - PMA_USER=${DB_USER}
+      - PMA_PASSWORD=${DB_PASSWORD}
     links:
       - mysql
     ports:
@@ -32,9 +31,8 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - "./:/var/www/html"
+      - "./:/var/www/html:ro"
       - "./docker/nginx/conf/default.conf:/etc/nginx/conf.d/default.conf:ro"
-      - "./docker/nginx/log:/var/log/nginx/"
     environment:
       TZ: "Asia/Tokyo"
     depends_on:
@@ -43,7 +41,8 @@ services:
       - phpfpm
 
   phpfpm:
-    build: ./docker/phpfpm/
+    build:
+      context: ./docker/phpfpm/
     ports:
       - "9000:9000"
     environment:
@@ -51,6 +50,7 @@ services:
     volumes:
       - "./:/var/www/html"
       - "./docker/phpfpm/conf:/usr/local/etc/php"
+    user: "${USER_ID}:${GROUP_ID}"
     depends_on:
       - mysql
     links:
