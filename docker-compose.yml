@@ -1,7 +1,6 @@
 services:
   mysql:
     image: mysql:8.0
-    restart: always
     volumes:
       - db_data:/var/lib/mysql
     environment:
@@ -25,7 +24,6 @@ services:
       - "./docker/phpmyadmin/conf.d:/usr/local/etc/php/conf.d"
 
   nginx:
-    restart: always
     build: ./docker/nginx
     ports:
       - "80:80"
@@ -47,6 +45,8 @@ services:
       - "9000:9000"
     environment:
       TZ: "Asia/Tokyo"
+    env_file:
+      - .env
     volumes:
       - "./:/var/www/html"
       - "./docker/phpfpm/conf:/usr/local/etc/php"

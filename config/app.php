@@ -100,7 +100,7 @@ return [
         'default' => [
             'className' => FileEngine::class,
             // 'path' => CACHE,
-            'path' => '/tmp',
+            'path' => $_ENV['ENV'] === 'dev' ? CACHE : '/tmp',
             'url' => env('CACHE_DEFAULT_URL', null),
         ],
 
@@ -114,7 +114,7 @@ return [
             'className' => FileEngine::class,
             'prefix' => 'myapp_cake_core_',
             // 'path' => CACHE . 'persistent' . DS,
-            'path' => $_ENV['ENV'] === 'dev' ? CACHE : '/tmp' . '/persistent' . DS,
+            'path' => ($_ENV['ENV'] === 'dev' ? CACHE : '/tmp') . '/persistent' . DS,
             'serialize' => true,
             'duration' => '+1 years',
             'url' => env('CACHE_CAKECORE_URL', null),
@@ -130,7 +130,7 @@ return [
             'className' => FileEngine::class,
             'prefix' => 'myapp_cake_model_',
             // 'path' => CACHE . 'models' . DS,
-            'path' => $_ENV['ENV'] === 'dev' ? CACHE : '/tmp' . '/models' . DS,
+            'path' => ($_ENV['ENV'] === 'dev' ? CACHE : '/tmp') . '/models' . DS,
             'serialize' => true,
             'duration' => '+1 years',
             'url' => env('CACHE_CAKEMODEL_URL', null),
